@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<robot name="four_wheel_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:property name="body_length" value="0.52"/>
+  <xacro:property name="body_width" value="0.36"/>
+  <xacro:property name="body_height" value="0.14"/>
+  <xacro:property name="wheel_radius" value="0.075"/>
+  <xacro:property name="wheel_width" value="0.045"/>
+
+  <link name="base_footprint"/>
+  <link name="base_link">
+    <inertial><origin xyz="0 0 0"/><mass value="8.0"/><inertia ixx="0.20" ixy="0" ixz="0" iyy="0.27" iyz="0" izz="0.42"/></inertial>
+    <visual><origin xyz="0 0 0.10"/><geometry><box size="${body_length} ${body_width} ${body_height}"/></geometry><material name="blue"><color rgba="0.10 0.35 0.70 1"/></material></visual>
+    <collision><origin xyz="0 0 0.10"/><geometry><box size="${body_length} ${body_width} ${body_height}"/></geometry></collision>
+  </link>
+  <joint name="base_footprint_joint" type="fixed"><parent link="base_footprint"/><child link="base_link"/><origin xyz="0 0 0"/></joint>
+
+  <xacro:macro name="wheel" params="prefix x y">
+    <link name="${prefix}_wheel_link">
+      <inertial><origin xyz="0 0 0" rpy="1.5708 0 0"/><mass value="0.35"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.0015"/></inertial>
+      <visual><origin xyz="0 0 0" rpy="1.5708 0 0"/><geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry><material name="black"><color rgba="0.05 0.05 0.05 1"/></material></visual>
+      <collision><origin xyz="0 0 0" rpy="1.5708 0 0"/><geometry><cylinder radius="${wheel_radius}" length="${wheel_width}"/></geometry></collision>
+    </link>
+    <joint name="${prefix}_wheel_joint" type="continuous">
+      <parent link="base_link"/><child link="${prefix}_wheel_link"/><origin xyz="${x} ${y} ${wheel_radius}" rpy="0 0 0"/><axis xyz="0 1 0"/>
+    </joint>
+    <gazebo reference="${prefix}_wheel_link"><mu1>1.5</mu1><mu2>1.5</mu2><kp>1000000.0</kp><kd>100.0</kd></gazebo>
+  </xacro:macro>
+
+  <xacro:wheel prefix="left_front" x="0.19" y="0.205"/>
+  <xacro:wheel prefix="right_front" x="0.19" y="-0.205"/>
+  <xacro:wheel prefix="left_rear" x="-0.19" y="0.205"/>
+  <xacro:wheel prefix="right_rear" x="-0.19" y="-0.205"/>
+
+  <gazebo>
+    <plugin name="four_wheel_drive" filename="libgazebo_ros_skid_steer_drive.so">
+      <ros><namespace>/</namespace></ros>
+      <update_rate>50</update_rate>
+      <left_front_joint>left_front_wheel_joint</left_front_joint>
+      <right_front_joint>right_front_wheel_joint</right_front_joint>
+      <left_rear_joint>left_rear_wheel_joint</left_rear_joint>
+      <right_rear_joint>right_rear_wheel_joint</right_rear_joint>
+      <wheel_separation>0.41</wheel_separation>
+      <wheel_diameter>0.15</wheel_diameter>
+      <max_wheel_torque>12.0</max_wheel_torque>
+      <max_wheel_acceleration>3.0</max_wheel_acceleration>
+      <command_topic>cmd_vel</command_topic>
+      <odometry_topic>odom</odometry_topic>
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_footprint</robot_base_frame>
+      <broadcast_odom_tf>true</broadcast_odom_tf>
+    </plugin>
+  </gazebo>
+</robot>

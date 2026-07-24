@@ -1,0 +1,16 @@
+Panels:
+  - Class: rviz_common/Displays
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 0.7
+      Class: rviz_default_plugins/Grid
+      Name: Grid
+    - Class: rviz_default_plugins/RobotModel
+      Name: RobotModel
+      Robot Description: robot_description
+    - Class: rviz_default_plugins/TF
+      Name: TF
+  Global Options:
+    Fixed Frame: odom
+  Name: root
