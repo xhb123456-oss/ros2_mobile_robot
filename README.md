@@ -22,3 +22,11 @@
 - Ubuntu 22.04
 - ROS 2 Humble
 - Gazebo Classic 11
+
+  ## 运行演示
+
+已在 Ubuntu 22.04、ROS 2 Humble 与 Gazebo Classic 11 环境完成运行验证。
+
+- [观看 v0.1.0 仿真演示视频](https://github.com/xhb123456-oss/ros2_mobile_robot/releases/tag/v0.1.0)
+
+演示内容：四轮机器人模型加载、直行、原地转向与“8”字轨迹控制。
