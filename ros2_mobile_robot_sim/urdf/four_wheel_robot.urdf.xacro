@@ -31,23 +31,41 @@
   <xacro:wheel prefix="left_rear" x="-0.19" y="0.205"/>
   <xacro:wheel prefix="right_rear" x="-0.19" y="-0.205"/>
 
-  <gazebo>
-    <plugin name="four_wheel_drive" filename="libgazebo_ros_skid_steer_drive.so">
-      <ros><namespace>/</namespace></ros>
-      <update_rate>50</update_rate>
-      <left_front_joint>left_front_wheel_joint</left_front_joint>
-      <right_front_joint>right_front_wheel_joint</right_front_joint>
-      <left_rear_joint>left_rear_wheel_joint</left_rear_joint>
-      <right_rear_joint>right_rear_wheel_joint</right_rear_joint>
-      <wheel_separation>0.41</wheel_separation>
-      <wheel_diameter>0.15</wheel_diameter>
-      <max_wheel_torque>12.0</max_wheel_torque>
-      <max_wheel_acceleration>3.0</max_wheel_acceleration>
-      <command_topic>cmd_vel</command_topic>
-      <odometry_topic>odom</odometry_topic>
-      <odometry_frame>odom</odometry_frame>
-      <robot_base_frame>base_footprint</robot_base_frame>
-      <broadcast_odom_tf>true</broadcast_odom_tf>
-    </plugin>
-  </gazebo>
+<gazebo>
+  <plugin name="four_wheel_drive"
+          filename="libgazebo_ros_diff_drive.so">
+
+    <ros>
+      <namespace>/</namespace>
+    </ros>
+
+    <update_rate>50.0</update_rate>
+
+    <num_wheel_pairs>2</num_wheel_pairs>
+
+    <left_joint>left_front_wheel_joint</left_joint>
+    <right_joint>right_front_wheel_joint</right_joint>
+
+    <left_joint>left_rear_wheel_joint</left_joint>
+    <right_joint>right_rear_wheel_joint</right_joint>
+
+    <wheel_separation>0.41</wheel_separation>
+    <wheel_separation>0.41</wheel_separation>
+
+    <wheel_diameter>0.15</wheel_diameter>
+    <wheel_diameter>0.15</wheel_diameter>
+
+    <max_wheel_torque>30.0</max_wheel_torque>
+    <max_wheel_acceleration>10.0</max_wheel_acceleration>
+
+    <command_topic>cmd_vel</command_topic>
+    <odometry_topic>odom</odometry_topic>
+    <odometry_frame>odom</odometry_frame>
+    <robot_base_frame>base_footprint</robot_base_frame>
+
+    <publish_odom>true</publish_odom>
+    <publish_odom_tf>true</publish_odom_tf>
+    <publish_wheel_tf>true</publish_wheel_tf>
+  </plugin>
+</gazebo>
 </robot>
