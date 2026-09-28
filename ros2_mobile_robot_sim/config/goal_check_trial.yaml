@@ -1,0 +1,14 @@
+# Pair with the separate nav2_controller goal-time-fix overlay.
+# Keep obstacle/arrival settings; recheck XY instead of latching it.
+# RotateToGoal still latches until a new plan; watch for progress failures.
+controller_server:
+  ros__parameters:
+    general_goal_checker:
+      xy_goal_tolerance: 0.10
+      yaw_goal_tolerance: 0.10
+      stateful: false
+    FollowPath:
+      xy_goal_tolerance: 0.10
+      min_speed_xy: 0.03
+      min_speed_theta: 0.12
+      BaseObstacle.scale: 0.05

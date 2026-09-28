@@ -1,0 +1,93 @@
+# Merged into the installed Nav2 Humble defaults by navigation.launch.py.
+# The robot fits inside a 0.36 m radius circle including all four wheels.
+bt_navigator:
+  ros__parameters:
+    robot_base_frame: base_footprint
+
+controller_server:
+  ros__parameters:
+    controller_frequency: 10.0
+    min_y_velocity_threshold: 0.001
+    progress_checker:
+      required_movement_radius: 0.1
+      movement_time_allowance: 20.0
+    general_goal_checker:
+      xy_goal_tolerance: 0.15
+      yaw_goal_tolerance: 0.15
+    FollowPath:
+      max_vel_x: 0.2
+      max_speed_xy: 0.2
+      max_vel_theta: 0.6
+      acc_lim_x: 0.5
+      decel_lim_x: -0.5
+      acc_lim_theta: 1.0
+      decel_lim_theta: -1.0
+      vy_samples: 1
+      xy_goal_tolerance: 0.15
+      trans_stopped_velocity: 0.03
+      transform_tolerance: 0.3
+      debug_trajectory_details: false
+
+local_costmap:
+  local_costmap:
+    ros__parameters:
+      robot_base_frame: base_footprint
+      robot_radius: 0.36
+      width: 4
+      height: 4
+      plugins: [obstacle_layer, inflation_layer]
+      obstacle_layer:
+        plugin: nav2_costmap_2d::ObstacleLayer
+        enabled: true
+        observation_sources: scan
+        scan:
+          topic: /scan
+          data_type: LaserScan
+          clearing: true
+          marking: true
+          max_obstacle_height: 2.0
+          raytrace_max_range: 8.0
+          raytrace_min_range: 0.12
+          obstacle_max_range: 7.5
+          obstacle_min_range: 0.12
+          inf_is_valid: true
+      inflation_layer:
+        inflation_radius: 0.65
+        cost_scaling_factor: 3.0
+
+global_costmap:
+  global_costmap:
+    ros__parameters:
+      robot_base_frame: base_footprint
+      robot_radius: 0.36
+      obstacle_layer:
+        scan:
+          raytrace_max_range: 8.0
+          raytrace_min_range: 0.12
+          obstacle_max_range: 7.5
+          obstacle_min_range: 0.12
+          inf_is_valid: true
+      inflation_layer:
+        inflation_radius: 0.65
+        cost_scaling_factor: 3.0
+
+planner_server:
+  ros__parameters:
+    GridBased:
+      tolerance: 0.15
+      allow_unknown: false
+
+behavior_server:
+  ros__parameters:
+    robot_base_frame: base_footprint
+    max_rotational_vel: 0.6
+    min_rotational_vel: 0.15
+    rotational_acc_lim: 1.0
+
+velocity_smoother:
+  ros__parameters:
+    max_velocity: [0.2, 0.0, 0.6]
+    min_velocity: [-0.15, 0.0, -0.6]
+    max_accel: [0.5, 0.0, 1.0]
+    max_decel: [-0.5, 0.0, -1.0]
+    velocity_timeout: 1.0

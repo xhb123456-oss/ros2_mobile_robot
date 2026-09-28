@@ -1,0 +1,10 @@
+build/
+install/
+log/
+__pycache__/
+*.py[cod]
+*.db3
+*.mcap
+downloads/
+test_results/
+.vscode/

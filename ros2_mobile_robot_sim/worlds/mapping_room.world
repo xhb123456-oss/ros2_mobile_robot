@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<sdf version="1.6">
+  <world name="mapping_room">
+    <include><uri>model://ground_plane</uri></include>
+    <include><uri>model://sun</uri></include>
+    <physics name="default_physics" type="ode">
+      <max_step_size>0.001</max_step_size><real_time_factor>1.0</real_time_factor>
+    </physics>
+    <!-- Wall centrelines bound an 8 x 6 m room; clear interior is 7.8 x 5.8 m. -->
+    <model name="room_walls">
+      <static>true</static>
+      <link name="north">
+        <pose>0 3 0.5 0 0 0</pose>
+        <collision name="collision"><geometry><box><size>8.2 0.2 1</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>8.2 0.2 1</size></box></geometry></visual>
+      </link>
+      <link name="south">
+        <pose>0 -3 0.5 0 0 0</pose>
+        <collision name="collision"><geometry><box><size>8.2 0.2 1</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>8.2 0.2 1</size></box></geometry></visual>
+      </link>
+      <link name="east">
+        <pose>4 0 0.5 0 0 0</pose>
+        <collision name="collision"><geometry><box><size>0.2 6 1</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>0.2 6 1</size></box></geometry></visual>
+      </link>
+      <link name="west">
+        <pose>-4 0 0.5 0 0 0</pose>
+        <collision name="collision"><geometry><box><size>0.2 6 1</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>0.2 6 1</size></box></geometry></visual>
+      </link>
+    </model>
+    <model name="square_obstacle">
+      <static>true</static><pose>1.5 0.8 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision"><geometry><box><size>0.8 0.8 1</size></box></geometry></collision>
+        <visual name="visual">
+          <geometry><box><size>0.8 0.8 1</size></box></geometry>
+          <material><ambient>0.8 0.5 0.1 1</ambient><diffuse>0.8 0.5 0.1 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="long_obstacle">
+      <static>true</static><pose>-1.7 -1 0.5 0 0 0</pose>
+      <link name="body">
+        <collision name="collision"><geometry><box><size>1.2 0.5 1</size></box></geometry></collision>
+        <visual name="visual">
+          <geometry><box><size>1.2 0.5 1</size></box></geometry>
+          <material><ambient>0.2 0.6 0.3 1</ambient><diffuse>0.2 0.6 0.3 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>

@@ -1,0 +1,7 @@
+# Experimental: load explicitly through navigation.launch.py amcl_overrides:=...
+# Runtime trials and one full-restart roundtrip verified by the user on 2026-09-21.
+# Longer stability validation remains pending; this is still an opt-in trial.
+# Pair with arrival_margin_trial.yaml; external acceptance remains unchanged.
+amcl:
+  ros__parameters:
+    transform_tolerance: 0.2
