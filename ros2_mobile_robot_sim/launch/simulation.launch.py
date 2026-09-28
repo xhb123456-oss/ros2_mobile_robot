@@ -11,6 +11,7 @@ def generate_launch_description():
     pkg_share = FindPackageShare('mobile_robot_sim')
     gazebo_share = FindPackageShare('gazebo_ros')
     use_rviz = LaunchConfiguration('use_rviz')
+    world_file = LaunchConfiguration('world_file')
 
     robot_description = Command([
         'xacro ', PathJoinSubstitution([pkg_share, 'urdf', 'four_wheel_robot.urdf.xacro'])
@@ -21,7 +22,7 @@ def generate_launch_description():
             PathJoinSubstitution([gazebo_share, 'launch', 'gazebo.launch.py'])
         ),
         launch_arguments={
-            'world': PathJoinSubstitution([pkg_share, 'worlds', 'empty_track.world']),
+            'world': PathJoinSubstitution([pkg_share, 'worlds', world_file]),
             'verbose': 'false',
         }.items(),
     )
@@ -43,6 +44,7 @@ def generate_launch_description():
     rviz = Node(
         package='rviz2',
         executable='rviz2',
+        parameters=[{'use_sim_time': True}],
         arguments=['-d', PathJoinSubstitution([pkg_share, 'rviz', 'mobile_robot.rviz'])],
         condition=IfCondition(use_rviz),
         output='screen',
@@ -50,6 +52,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         DeclareLaunchArgument('use_rviz', default_value='true'),
+        DeclareLaunchArgument('world_file', default_value='empty_track.world'),
         gazebo,
         robot_state_publisher,
         spawn_robot,

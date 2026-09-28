@@ -1,0 +1,16 @@
+# Opt-in trial: preserve arrival_margin_trial.yaml and change only the
+# BaseObstacle score scale from the verified live 0.02 to 0.05.
+# This is an experimental preference for lower obstacle costs, not a fix
+# for already-invalid trajectories. Keep collision checks/radius unchanged.
+# Restart navigation to initialize the critic with this value.
+# Compare using the same per-goal replanning_02hz_trial.xml as the prior run.
+controller_server:
+  ros__parameters:
+    general_goal_checker:
+      xy_goal_tolerance: 0.10
+      yaw_goal_tolerance: 0.10
+    FollowPath:
+      xy_goal_tolerance: 0.10
+      min_speed_xy: 0.03
+      min_speed_theta: 0.12
+      BaseObstacle.scale: 0.05

@@ -14,6 +14,36 @@
   </link>
   <joint name="base_footprint_joint" type="fixed"><parent link="base_footprint"/><child link="base_link"/><origin xyz="0 0 0"/></joint>
 
+  <link name="laser_link">
+    <inertial><mass value="0.1"/><inertia ixx="0.000044" ixy="0" ixz="0" iyy="0.000044" iyz="0" izz="0.00006125"/></inertial>
+    <visual><geometry><cylinder radius="0.035" length="0.04"/></geometry><material name="laser_red"><color rgba="0.8 0.1 0.1 1"/></material></visual>
+    <collision><geometry><cylinder radius="0.035" length="0.04"/></geometry></collision>
+  </link>
+  <joint name="laser_joint" type="fixed">
+    <parent link="base_link"/><child link="laser_link"/><origin xyz="0 0 0.22"/>
+  </joint>
+  <gazebo reference="laser_link">
+    <material>Gazebo/Red</material>
+    <sensor name="planar_laser" type="ray">
+      <always_on>true</always_on>
+      <update_rate>10</update_rate>
+      <visualize>false</visualize>
+      <ray>
+        <scan><horizontal>
+          <samples>360</samples><resolution>1</resolution>
+          <min_angle>-3.141592653589793</min_angle>
+          <max_angle>3.141592653589793</max_angle>
+        </horizontal></scan>
+        <range><min>0.12</min><max>8.0</max><resolution>0.01</resolution></range>
+      </ray>
+      <plugin name="laser_ros" filename="libgazebo_ros_ray_sensor.so">
+        <ros><namespace>/</namespace><remapping>~/out:=scan</remapping></ros>
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>laser_link</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
   <xacro:macro name="wheel" params="prefix x y">
     <link name="${prefix}_wheel_link">
       <inertial><origin xyz="0 0 0" rpy="1.5708 0 0"/><mass value="0.35"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.0015"/></inertial>
@@ -31,41 +61,39 @@
   <xacro:wheel prefix="left_rear" x="-0.19" y="0.205"/>
   <xacro:wheel prefix="right_rear" x="-0.19" y="-0.205"/>
 
-<gazebo>
-  <plugin name="four_wheel_drive"
-          filename="libgazebo_ros_diff_drive.so">
-
-    <ros>
-      <namespace>/</namespace>
-    </ros>
-
-    <update_rate>50.0</update_rate>
-
-    <num_wheel_pairs>2</num_wheel_pairs>
-
-    <left_joint>left_front_wheel_joint</left_joint>
-    <right_joint>right_front_wheel_joint</right_joint>
-
-    <left_joint>left_rear_wheel_joint</left_joint>
-    <right_joint>right_rear_wheel_joint</right_joint>
-
-    <wheel_separation>0.41</wheel_separation>
-    <wheel_separation>0.41</wheel_separation>
-
-    <wheel_diameter>0.15</wheel_diameter>
-    <wheel_diameter>0.15</wheel_diameter>
-
-    <max_wheel_torque>30.0</max_wheel_torque>
-    <max_wheel_acceleration>10.0</max_wheel_acceleration>
-
-    <command_topic>cmd_vel</command_topic>
-    <odometry_topic>odom</odometry_topic>
-    <odometry_frame>odom</odometry_frame>
-    <robot_base_frame>base_footprint</robot_base_frame>
-
-    <publish_odom>true</publish_odom>
-    <publish_odom_tf>true</publish_odom_tf>
-    <publish_wheel_tf>true</publish_wheel_tf>
-  </plugin>
-</gazebo>
+  <gazebo>
+    <plugin name="four_wheel_drive" filename="libgazebo_ros_diff_drive.so">
+      <ros><namespace>/</namespace></ros>
+      <update_rate>50</update_rate>
+      <!-- Pair 1 is the front axle; pair 2 is the rear axle. -->
+      <num_wheel_pairs>2</num_wheel_pairs>
+      <left_joint>left_front_wheel_joint</left_joint>
+      <right_joint>right_front_wheel_joint</right_joint>
+      <left_joint>left_rear_wheel_joint</left_joint>
+      <right_joint>right_rear_wheel_joint</right_joint>
+      <!-- Geometry must be specified separately for each wheel pair. -->
+      <wheel_separation>0.41</wheel_separation>
+      <wheel_separation>0.41</wheel_separation>
+      <wheel_diameter>0.15</wheel_diameter>
+      <wheel_diameter>0.15</wheel_diameter>
+      <max_wheel_torque>12.0</max_wheel_torque>
+      <max_wheel_acceleration>3.0</max_wheel_acceleration>
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_footprint</robot_base_frame>
+      <!-- 1 = Gazebo world ground truth, not wheel-encoder integration. -->
+      <odometry_source>1</odometry_source>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+      <!-- robot_state_publisher owns wheel TFs via /joint_states. -->
+      <publish_wheel_tf>false</publish_wheel_tf>
+    </plugin>
+    <plugin name="wheel_joint_states" filename="libgazebo_ros_joint_state_publisher.so">
+      <ros><namespace>/</namespace></ros>
+      <update_rate>50</update_rate>
+      <joint_name>left_front_wheel_joint</joint_name>
+      <joint_name>right_front_wheel_joint</joint_name>
+      <joint_name>left_rear_wheel_joint</joint_name>
+      <joint_name>right_rear_wheel_joint</joint_name>
+    </plugin>
+  </gazebo>
 </robot>

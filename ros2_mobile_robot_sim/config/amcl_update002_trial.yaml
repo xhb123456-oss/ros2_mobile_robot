@@ -1,0 +1,9 @@
+# Experimental motion-triggered localization update thresholds.
+# Keep the A* navigation trial and goal-time controller overlay unchanged.
+# External acceptance remains 0.15 m / 0.15 rad; this is not a success gate.
+amcl:
+  ros__parameters:
+    transform_tolerance: 0.2
+    update_min_d: 0.02
+    update_min_a: 0.02
+    resample_interval: 1

@@ -1,0 +1,14 @@
+# Experimental: load explicitly with navigation.launch.py nav_overrides:=...
+# Keep external acceptance at 0.15 m / 0.15 rad and its +0.5 s sample.
+# Retain the already tested minimum-motion pair while testing arrival margin.
+# RotateToGoal reads FollowPath.xy_goal_tolerance during initialization:
+# restart navigation to apply both arrival windows consistently.
+controller_server:
+  ros__parameters:
+    general_goal_checker:
+      xy_goal_tolerance: 0.10
+      yaw_goal_tolerance: 0.10
+    FollowPath:
+      xy_goal_tolerance: 0.10
+      min_speed_xy: 0.03
+      min_speed_theta: 0.12

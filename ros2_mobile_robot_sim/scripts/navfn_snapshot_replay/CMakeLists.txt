@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.8)
+project(navfn_snapshot_replay)
+find_package(ament_cmake REQUIRED)
+find_package(nav2_navfn_planner REQUIRED)
+add_executable(navfn_snapshot_replay main.cpp)
+ament_target_dependencies(navfn_snapshot_replay nav2_navfn_planner)
